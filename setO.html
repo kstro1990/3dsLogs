@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <!--Import Google Icon Font-->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!--Import materialize.css-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <!--Let browser know website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body>
+  <nav class="light-green accent-4">
+    <div class="nav-wrapper ">
+      <a href="#" class="brand-logo right"> PlacetoPay</a>
+      <ul id="nav-mobile" class="left hide-on-med-and-down">
+        <a href="#" class="brand-logo"> 3DS servcio MPI</a>
+        <li><a href="sass.html"></a></li>
+        <li><a href="badges.html"></a></li>
+        <li><a href="collapsible.html"></a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="row">
+    <h4 class="header">información</h2>
+    <div class="col s12 m6">
+      <div class="card ">
+        <!-- Card Content -->
+        <div class="row">
+          <form class="col s12">
+            <div class="row">
+              <div class="input-field col s6">
+                <input placeholder="Loging" id="lgn" name="lgn" type="text" class="validate" required>
+                <label for="first_name">Login</label>
+              </div>
+              <div class="input-field col s6">
+                <input placeholder="Trankey" id="tky" name="tky" type="password" class="validate" required>
+                <label for="first_name">Trankey</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s6">
+                <input placeholder="Tarjeta" id="card" name="card" type="text" class="validate" required>
+                <label for="first_name"> Tarjeta </label>
+              </div>
+              <div class="input-field col s6">
+                <input placeholder="Total" id="valor" name="valor" type="text" class="validate" required>
+                <label for="first_name"> Total </label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s6">
+                <a class="waves-effect waves-light btn" onclick="postCredito()">Enviar</a>
+              </div>
+              <div class="input-field col s6">
+                <a class="waves-effect waves-light btn" onclick="limpioAAA()">Limpiar</a>
+              </div>
+            </div>
+          </br>
+          </form>
+        </br>
+        </div>
+      </div>
+    </div>
+
+    <div class="col s12 m6">
+      <div class="card ">
+        <!-- Card Content -->
+        <div class="divider"></div>
+        <div class="section">
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--JavaScript at end of body for optimized loading-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script type="text/javascript">
+
+    function limpioAAA(){
+        $( ".section" ).empty();
+    }
+
+    function postCredito() {
+      // alert("alerta de alertas");
+      var lgn = $("#lgn").val();
+      var trk = $("#tky").val();
+      var card = $("#card").val();
+      var valor = $("#valor").val();
+
+      $(".section").append("<div class='progress'> <div class='indeterminate'></div> </div>");
+
+      $.ajax({
+        method: "POST",
+        url: "3dsLogs.php",
+        data: {
+          login: lgn,
+          trankey: trk,
+          card: card,
+          valor: valor,
+          fun:1
+        },
+        success: function(result) {
+          var resultado = result;
+          var yison = JSON.parse(resultado);
+          console.log(yison);
+          /** 
+          if (yison.status.status == "FAILED") {
+            console.log("es fallido ");
+            $( ".section" ).empty();
+            alert(yison.status.message);
+          } else {
+            $( ".section" ).empty();
+            console.log(yison.credits);
+            for (var i = 0; i < yison.credits.length; i++) {
+              //tipo de credito
+              console.log(yison.credits[i].description);
+              var liscredito = yison.credits[i];
+              $(".section").append("<h5>" + yison.credits[i].description + "</h5>");
+              //console.log(liscredito);
+              for (var e = 0; e < liscredito.installments.length; e++) {
+                console.log(liscredito.installments[e]);
+                $(".section").append("<p>" + liscredito.installments[e] + "</p>");
+              }
+            }
+          }
+          **/
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>
